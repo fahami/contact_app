@@ -16,8 +16,8 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       body: IndexedStack(
         index: _selectedIndex,
-        children: const [
-          ContactListView(),
+        children:  [
+          const ContactListView(),
           MyProfileView(),
         ],
       ),
