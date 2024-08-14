@@ -1,10 +1,12 @@
-import 'package:contact_app/features/contact/contact_detail_page.dart';
 import 'package:contact_app/services/auth_service.dart';
+import 'package:contact_app/services/contacts_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class MyProfileView extends GetView<AuthService> {
-  const MyProfileView({super.key});
+  MyProfileView({super.key});
+
+  final contactController = Get.find<ContactsService>();
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +43,7 @@ class MyProfileView extends GetView<AuthService> {
               SizedBox(
                 width: double.infinity,
                 child: FilledButton.tonal(
-                  onPressed: () => Get.to(ContactDetailPage.new),
+                  onPressed: () => contactController.editContact(controller.currentUser.value),
                   child: const Text('Update my detail'),
                 ),
               ),

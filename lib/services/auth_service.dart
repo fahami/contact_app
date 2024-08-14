@@ -21,6 +21,8 @@ class AuthService extends GetxService {
 
   static bool get isLoggedIn => box.hasData('user');
 
+  static AuthService get to => Get.find();
+
   Future<void> login(String userId) async {
     try {
       if (userId.isEmpty) {

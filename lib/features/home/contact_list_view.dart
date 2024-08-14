@@ -1,12 +1,11 @@
-import 'package:contact_app/features/contact/contact_detail_page.dart';
-import 'package:contact_app/models/contact_model.dart';
+import 'package:contact_app/services/auth_service.dart';
+import 'package:contact_app/services/contacts_service.dart';
 import 'package:contact_app/utils/app_colors.dart';
-import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:grouped_list/grouped_list.dart';
 
-class ContactListView extends StatelessWidget {
+class ContactListView extends GetView<ContactsService> {
   const ContactListView({super.key});
 
   @override
@@ -21,11 +20,11 @@ class ContactListView extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.all(16),
-            child: TextField(
+            child: TextFormField(
+              onChanged: controller.search,
               decoration: InputDecoration(
                 hintText: 'Search your contact list...',
                 suffixIcon: const Icon(Icons.search),
-                // suffixIconColor: WidgetStateColor.resolveWith((states) => states.contains(WidgetState.focused) ? blue : grey),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
@@ -33,45 +32,51 @@ class ContactListView extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-          Expanded(
-            child: GroupedListView(
-              elements: List.generate(
-                100,
-                (index) => ContactModel(
-                  id: faker.guid.guid(),
-                  firstName: faker.person.name(),
-                  lastName: faker.person.lastName(),
-                  email: faker.internet.email(),
-                  dateOfBirth: faker.date.dateTime().toString(),
+          Obx(() => Expanded(
+                child: RefreshIndicator(
+                  onRefresh: controller.loadContacts,
+                  child: GroupedListView(
+                    elements: controller.searchResults.isNotEmpty ? controller.searchResults.value : controller.contacts.value,
+                    groupBy: (element) => element.firstName[0],
+                    groupSeparatorBuilder: (groupValue) => Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(groupValue, style: Get.textTheme.titleMedium?.copyWith(color: blue, fontWeight: FontWeight.bold)),
+                          const Divider(),
+                        ],
+                      ),
+                    ),
+                    itemBuilder: (context, contact) => ListTile(
+                      minVerticalPadding: 20,
+                      leading: CircleAvatar(
+                        child: Text(contact.initialName.toUpperCase()),
+                      ),
+                      title: RichText(
+                        text: TextSpan(
+                          text: contact.fullName,
+                          style: Get.textTheme.titleMedium,
+                          children: [
+                            if (contact.id == AuthService.to.currentUser.value.id)
+                              TextSpan(
+                                text: ' (you)',
+                                style: Get.textTheme.titleMedium?.copyWith(color: grey, fontStyle: FontStyle.italic),
+                              ),
+                          ],
+                        ),
+                      ),
+                      onTap: () => controller.editContact(contact),
+                    ),
+                  ),
                 ),
-              ),
-              groupBy: (element) => element.firstName[0],
-              groupSeparatorBuilder: (groupValue) => Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(groupValue, style: Get.textTheme.titleMedium?.copyWith(color: blue, fontWeight: FontWeight.bold)),
-                    const Divider(),
-                  ],
-                ),
-              ),
-              itemBuilder: (context, element) => ListTile(
-                minVerticalPadding: 20,
-                leading: CircleAvatar(
-                  child: Text(element.firstName.split(' ').sublist(0, 2).map((c) => c[0]).join().toUpperCase()),
-                ),
-                title: Text(element.firstName),
-                onTap: () => Get.to(ContactDetailPage.new),
-              ),
-            ),
-          ),
+              )),
         ],
       ),
       floatingActionButton: FloatingActionButton(
         elevation: 0,
-        onPressed: () => Get.to(ContactDetailPage.new),
+        onPressed: controller.addContact,
         shape: const CircleBorder(),
         child: const Icon(Icons.add),
       ),
