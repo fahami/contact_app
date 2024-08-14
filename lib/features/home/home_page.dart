@@ -1,8 +1,6 @@
-import 'package:contact_app/features/contact/contact_detail_page.dart';
 import 'package:contact_app/features/home/contact_list_view.dart';
 import 'package:contact_app/features/home/my_profile_view.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

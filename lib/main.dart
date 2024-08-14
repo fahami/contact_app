@@ -1,13 +1,15 @@
-import 'package:contact_app/features/contact/contact_detail_page.dart';
-import 'package:contact_app/features/home/my_profile_view.dart';
-import 'package:contact_app/features/home/home_page.dart';
-import 'package:contact_app/features/login/login_page.dart';
+import 'package:contact_app/routes.dart';
+import 'package:contact_app/services/auth_service.dart';
 import 'package:contact_app/utils/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-void main() {
+Future<void> main() async {
+  await GetStorage.init();
+
   runApp(const MyApp());
 }
 
@@ -31,7 +33,12 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: Colors.white,
         colorScheme: ColorScheme.fromSeed(seedColor: blue).copyWith(secondary: blue),
       ),
-      home: const LoginPage(),
+      initialRoute: AppRoutes.home,
+      getPages: AppRoutes.routes,
+      builder: EasyLoading.init(),
+      initialBinding: BindingsBuilder(() {
+        Get.put(AuthService(), permanent: true);
+      }),
     );
   }
 }

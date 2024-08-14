@@ -1,5 +1,4 @@
 import 'package:contact_app/features/contact/contact_detail_page.dart';
-import 'package:contact_app/features/home/my_profile_view.dart';
 import 'package:contact_app/models/contact_model.dart';
 import 'package:contact_app/utils/app_colors.dart';
 import 'package:faker/faker.dart';

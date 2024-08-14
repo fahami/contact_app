@@ -1,11 +1,11 @@
 import 'package:contact_app/features/contact/contact_detail_page.dart';
+import 'package:contact_app/services/auth_service.dart';
 import 'package:contact_app/utils/constants.dart';
 import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 
-class MyProfileView extends StatelessWidget {
+class MyProfileView extends GetView<AuthService> {
   const MyProfileView({super.key});
 
   @override
@@ -16,7 +16,7 @@ class MyProfileView extends StatelessWidget {
         centerTitle: false,
         actions: [
           TextButton(
-            onPressed: () {},
+            onPressed: controller.logout,
             child: Text(
               'Logout',
               style: TextStyle(color: Get.theme.primaryColor),

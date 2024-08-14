@@ -3,7 +3,6 @@ import 'package:contact_app/utils/constants.dart';
 import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 
 class ContactDetailPage extends StatelessWidget {
   const ContactDetailPage({super.key});
