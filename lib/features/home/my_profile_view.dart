@@ -1,7 +1,5 @@
 import 'package:contact_app/features/contact/contact_detail_page.dart';
 import 'package:contact_app/services/auth_service.dart';
-import 'package:contact_app/utils/constants.dart';
-import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -24,29 +22,31 @@ class MyProfileView extends GetView<AuthService> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 34),
-        child: Column(
-          children: [
-            CircleAvatar(
-              radius: 50,
-              child: Text('A', style: Get.textTheme.displayMedium?.copyWith(color: Colors.white)),
-            ),
-            const SizedBox(height: 10),
-            Text(faker.person.name(), style: Get.textTheme.titleMedium),
-            const SizedBox(height: 10),
-            Text(faker.internet.email(), style: Get.textTheme.titleMedium),
-            const SizedBox(height: 10),
-            Text(dateFormat.format(faker.date.dateTime(minYear: 2000, maxYear: 2030)), style: Get.textTheme.titleMedium),
-            const SizedBox(height: 25),
-            SizedBox(
-              width: double.infinity,
-              child: FilledButton.tonal(
-                onPressed: () => Get.to(ContactDetailPage.new),
-                child: const Text('Update my detail'),
+      body: Obx(
+        () => SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 34),
+          child: Column(
+            children: [
+              CircleAvatar(
+                radius: 50,
+                child: Text(controller.currentUser.value.initialName, style: Get.textTheme.displaySmall?.copyWith(color: Colors.white)),
               ),
-            ),
-          ],
+              const SizedBox(height: 10),
+              Text(controller.currentUser.value.fullName, style: Get.textTheme.titleMedium),
+              const SizedBox(height: 10),
+              if (controller.currentUser.value.email != null) Text(controller.currentUser.value.email!, style: Get.textTheme.titleMedium),
+              const SizedBox(height: 10),
+              if (controller.currentUser.value.dateOfBirth != null) Text(controller.currentUser.value.dateOfBirth!, style: Get.textTheme.titleMedium),
+              const SizedBox(height: 25),
+              SizedBox(
+                width: double.infinity,
+                child: FilledButton.tonal(
+                  onPressed: () => Get.to(ContactDetailPage.new),
+                  child: const Text('Update my detail'),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

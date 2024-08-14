@@ -38,12 +38,14 @@ class ContactListView extends StatelessWidget {
               elements: List.generate(
                 100,
                 (index) => ContactModel(
-                  name: faker.person.name(),
+                  id: faker.guid.guid(),
+                  firstName: faker.person.name(),
+                  lastName: faker.person.lastName(),
                   email: faker.internet.email(),
-                  phoneNumber: faker.phoneNumber.us(),
+                  dateOfBirth: faker.date.dateTime().toString(),
                 ),
               ),
-              groupBy: (element) => element.name[0],
+              groupBy: (element) => element.firstName[0],
               groupSeparatorBuilder: (groupValue) => Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Column(
@@ -58,9 +60,9 @@ class ContactListView extends StatelessWidget {
               itemBuilder: (context, element) => ListTile(
                 minVerticalPadding: 20,
                 leading: CircleAvatar(
-                  child: Text(element.name.split(' ').sublist(0, 2).map((c) => c[0]).join().toUpperCase()),
+                  child: Text(element.firstName.split(' ').sublist(0, 2).map((c) => c[0]).join().toUpperCase()),
                 ),
-                title: Text(element.name),
+                title: Text(element.firstName),
                 onTap: () => Get.to(ContactDetailPage.new),
               ),
             ),
